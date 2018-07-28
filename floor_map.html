@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			width: 2000px ;
+			height: 2000px ;
+		}
+
+		#target {
+			position: absolute ;
+			top: 50px ;
+			left: 200px ;
+			padding: 12px ;
+			border: 1px solid #000 ;
+			width: 300px ;
+			height: 300px ;
+			background-color: #fffff0 ;
+		}
+	</style>
+	<script src="index.js"></script>
+
+</head>
+<body>
+	<div id="target">
+		x = <span id="x"></span>
+		<br>y = <span id="y"></span>
+		<br>px = <span id="px"></span>
+		<br>py = <span id="py"></span>
+	</div>
+	<img src="./floor_map/sample.svg" >
+	<br>
+	<span id="export-link"></span>
+	<script>
+		document.getElementById( "target" ).addEventListener( "mouseup", function( event ) {
+		var clickX = event.pageX ;
+		var clickY = event.pageY ;
+
+		// 要素の位置を取得
+		var clientRect = this.getBoundingClientRect() ;
+		var positionX = clientRect.left + window.pageXOffset ;
+		var positionY = clientRect.top + window.pageYOffset ;
+
+		// 要素内におけるクリック位置を計算
+		var x = clickX - positionX ;
+		var y = clickY - positionY ;
+		console.log(x,y);   // x座標(絶対座標)
+
+		} ) ;
+
+		//JSON preserve
+		var tasks = [
+		{ task: 'task1', isDone: true, tags: ['project1', 'memo'] },
+		{ task: 'task2', isDone: false, tags: ['project1', 'memo'] },
+		{ task: 'task3', isDone: false, tags: ['project2', 'asap'] }
+		];
+		var data = JSON.stringify(tasks);
+		var a = document.createElement('a');
+		a.textContent = 'export'
+		a.download = 'tasks.json';
+		a.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+		a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+		var exportLink = document.getElementById('export-link');
+		exportLink.appendChild(a);
+	</script>
+</body>
+</html>
