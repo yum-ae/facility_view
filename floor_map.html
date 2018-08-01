@@ -78,13 +78,13 @@
 		{ task: 'task3', isDone: false, tags: ['project2', 'asap'] }
 		];
 		var data = JSON.stringify(tasks);
-		var a = document.createElement('a');
-		a.textContent = 'export'
-		a.download = 'tasks.json';
-		a.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
-		a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+		var exp = document.createElement('a');
+		exp.textContent = 'export'
+		exp.download = 'tasks.json';
+		exp.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+		exp.dataset.downloadurl = ['text/plain', exp.download, exp.href].join(':');
 		var exportLink = document.getElementById('export-link');
-		exportLink.appendChild(a);
+		exportLink.appendChild(exp);
 
 		},false);
 		</script>
