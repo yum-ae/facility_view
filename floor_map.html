@@ -2,120 +2,58 @@
 <html>
 <head>
 	<style>
-		body {
-			width: 2000px ;
-			height: 2000px ;
-		}
-
-		#target {
-			position: absolute ;
-			top: 50px ;
-			left: 200px ;
-			padding: 12px ;
-			border: 1px solid #000 ;
-			width: 30 0px ;
-			height: 300px ;
-			background-color: #fffff0 ;
-		}
-	.my-contextmenu {
-		display: none;
-		position: fixed;
-		width: 200px;
-		background-color: #fff;
-		border: 1px solid #ccc;
-		box-shadow: 1px 1px 1px rgba(0,0,0,.2);
-		z-index: 1000;
-		}
-	.my-contextmenu.show {
-		display: block;
-		}
-	.my-contextmenu ul {
-		list-style: none;
-		padding: 10px 0;
-		}
-	.my-contextmenu ul li {
-		padding: 4px 10px;
-		font-size: 14px;
-		color: #333;
-		}
+		.my-contextmenu {
+			display: none;
+			position: fixed;
+			width: 200px;
+			background-color: #fff;
+			border: 1px solid #ccc;
+			box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+			z-index: 1000;
+			}
+		.my-contextmenu.show {
+			display: block;
+			}
+		.my-contextmenu ul {
+			list-style: none;
+			}
+		.my-contextmenu ul li {
+			padding: 4px 4px;
+			font-size: 14px;
+			color: #333;
+			}
 	</style>
-	<script src="index.js"></script>
-
 </head>
 <body onContextmenu="return false;">
-	<div id="target">
-		x = <span id="x"></span>
-		<br>y = <span id="y"></span>
-		<br>px = <span id="px"></span>
-		<br>py = <span id="py"></span>
-	</div>
-	<img src="./floor_map/sample.svg" >
+	<img src="./floor_map/sample.svg" id="target">
 	<br>
-
-
-	//context click
+	<!-- context menu --> 
 	<div class="my-contextmenu" id="js-contextmenu">
-	<ul>
-	<li>add picture here</li>
-	<li>add text here</li>
-	<li>menu3</li>
-	</ul>
+		<ul>
+		<li>add picture here</li>
+		<li>add text here</li>
+		<li>menu3</li>
+		</ul>
 	</div>
-
-
 	<script>
-		(function(){
 		var myContextMenu = document.getElementById('js-contextmenu');
-		document.body.addEventListener('contextmenu',function(e){
-		var posX = e.pageX;
-		var posY = e.pageY;
-		myContextMenu.style.left = posX+'px';
-		myContextMenu.style.top = posY+'px';
-		myContextMenu.classList.add('show');
+		document.getElementById("target").addEventListener('contextmenu',function(e){
+			var imgRect = this.getBoundingClientRect() ;
+			var x = e.pageX + imgRect.left;
+			var y = e.pageY + imgRect.top;
+			myContextMenu.style.left = x+'px';
+			myContextMenu.style.top = y+'px';
+			myContextMenu.classList.add('show');
+			console.log(x,y);   // x座標(絶対座標)
 		});
 		document.body.addEventListener('click',function(){
-		if(myContextMenu.classList.contains('show')) {
-		myContextMenu.classList.remove('show');
-		}
-		})
-		}());
-		</script>
-	
-
-
-
-
-
-
-
-
-
-
-
+			if(myContextMenu.classList.contains('show')) {
+				myContextMenu.classList.remove('show');
+			}
+		});
+	</script>
 	<span id="export-link"></span>
 	<script>
-		document.getElementById( "target" ).addEventListener( "mouseup", function( event ) {
-		var clickX = event.pageX ;
-		var clickY = event.pageY ;
-
-		// 要素の位置を取得
-		var clientRect = this.getBoundingClientRect() ;
-		var positionX = clientRect.left + window.pageXOffset ;
-		var positionY = clientRect.top + window.pageYOffset ;
-
-		// 要素内におけるクリック位置を計算
-		var x = clickX - positionX ;
-		var y = clickY - positionY ;
-		console.log(x,y);   // x座標(絶対座標)
-
-		} ) ;
-
-
-
-
-
-
-
 		//JSON preserve
 		var tasks = [
 		{ task: 'task1', isDone: true, tags: ['project1', 'memo'] },
