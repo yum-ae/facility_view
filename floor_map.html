@@ -5,7 +5,8 @@
 		.my-contextmenu {
 			display: none;
 			position: fixed;
-			width: 200px;
+			height: 70px;
+			width: 400px;
 			background-color: #fff;
 			border: 1px solid #ccc;
 			box-shadow: 1px 1px 1px rgba(0,0,0,.2);
@@ -30,9 +31,7 @@
 	<!-- context menu --> 
 	<div class="my-contextmenu" id="js-contextmenu">
 		<ul>
-		<li>add picture here</li>
-		<li>add text here</li>
-		<li>menu3</li>
+			<li>add picture here<input type="file" id="setfile"></li>
 		</ul>
 	</div>
 	<script>
@@ -52,6 +51,13 @@
 			}
 		});
 	</script>
+	<script>
+		var setfile = document.getElementById("setfile");
+		setfile.addEventListener("change", function(evt){
+		  var file = evt.target.files;
+		  alert(file[0].name + "を取得しました。");
+		},false);
+		</script>
 	<span id="export-link"></span>
 	<script>
 		//JSON preserve
