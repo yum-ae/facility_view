@@ -24,6 +24,9 @@
 			color: #333;
 			}
 	</style>
+	<script>
+			globalx=0
+	</script>
 </head>
 <body onContextmenu="return false;">
 	<img src="./floor_map/sample.svg" id="target">
@@ -44,6 +47,8 @@
 			myContextMenu.style.top = y+'px';
 			myContextMenu.classList.add('show');
 			console.log(x,y);   // x座標(絶対座標)
+			globalx=x
+			globaly=y
 		});
 		document.body.addEventListener('click',function(){
 			if(myContextMenu.classList.contains('show')) {
@@ -54,15 +59,11 @@
 	<script>
 		var setfile = document.getElementById("setfile");
 		setfile.addEventListener("change", function(evt){
-		  var file = evt.target.files;
-		  alert(file[0].name + "を取得しました。");
-		},false);
-		</script>
-	<span id="export-link"></span>
-	<script>
+		var file = evt.target.files;
+		alert(file[0].name + "を取得しました。");
 		//JSON preserve
 		var tasks = [
-		{ task: 'task1', isDone: true, tags: ['project1', 'memo'] },
+		{ posx: globalx, posy: globaly, tags: ['project1', 'memo'] },
 		{ task: 'task2', isDone: false, tags: ['project1', 'memo'] },
 		{ task: 'task3', isDone: false, tags: ['project2', 'asap'] }
 		];
@@ -74,6 +75,9 @@
 		a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
 		var exportLink = document.getElementById('export-link');
 		exportLink.appendChild(a);
-	</script>
+
+		},false);
+		</script>
+	<span id="export-link"></span>
 </body>
 </html>
