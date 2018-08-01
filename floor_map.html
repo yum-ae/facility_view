@@ -4,8 +4,6 @@
 	<style>
 		a.point{
 			position: absolute;  
-			top: 170px;  
-			left: 260px;
 			width: 10px;
 			height: 10px;
 			border-radius: 50%;
@@ -71,6 +69,15 @@
 		setfile.addEventListener("change", function(evt){
 		var file = evt.target.files;
 		alert(file[0].name + "を取得しました。");
+
+		var point = document.createElement('a');
+		point.className="point";
+		point.style.left=globalx;
+		point.style.top=globaly;
+
+		document.body.appendChild(point);
+
+
 		//JSON preserve
 		var tasks = [
 		{ posx: globalx, posy: globaly, tags: ['project1', 'memo'] },
