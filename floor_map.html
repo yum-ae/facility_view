@@ -38,12 +38,13 @@
 	</script>
 </head>
 <body onContextmenu="return false;">
+	<a id="export"><img src="./icon/save.svg" height="25" width="25"></a>
 	<img src="./floor_map/sample.svg" id="target">
 	<br>
 	<!-- context menu --> 
 	<div class="my-contextmenu" id="js-contextmenu">
 		<ul>
-			<li>add picture here<input type="file" id="setfile"></li>
+			<li>add picture here <input type="file" id="setfile" accept="image/*" capture="camera"></li>
 		</ul>
 	</div>
 	<script>
@@ -68,34 +69,31 @@
 		var setfile = document.getElementById("setfile");
 		setfile.addEventListener("change", function(evt){
 		var file = evt.target.files;
-
 		var point = document.createElement('a');
 		point.className="point";
 		// -5 for point size itself
 		point.style.left=globalx - 5 + 'px';
 		point.style.top=globaly -5 + 'px';
-		point.href='./360view.html'
+		point.href='./aframe.html?'+file[0].name
 		document.body.appendChild(point);
-		alert(file[0].name + "を取得しました。");
-
+		console.log(file[0])
+		alert(file[0].name + " is registered");
+		});
+	
 
 		//JSON preserve
-		var tasks = [
-		{ posx: globalx, posy: globaly, tags: ['project1', 'memo'] },
-		{ task: 'task2', isDone: false, tags: ['project1', 'memo'] },
-		{ task: 'task3', isDone: false, tags: ['project2', 'asap'] }
-		];
-		var data = JSON.stringify(tasks);
-		var exp = document.createElement('a');
-		exp.textContent = 'export'
-		exp.download = 'setting.json';
-		exp.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
-		exp.dataset.downloadurl = ['text/plain', exp.download, exp.href].join(':');
-		var exportLink = document.getElementById('export-link');
-		exportLink.appendChild(exp);
-
+		var exp=document.getElementById('export')
+		exp.addEventListener("click", function(){
+			var json = [];
+			var ptlist=document.getElementsByClassName('point')
+			for (var i=0;i<ptlist.length;i++){
+				json.push({posX: ptlist.item(i).style.left, posY: ptlist.item(i).style.top, path:ptlist.item(i).href});
+			}
+			var data = JSON.stringify(json);
+			this.download = 'setting.json';
+			this.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+			this.dataset.downloadurl = ['text/plain', this.download, this.href].join(':');
 		},false);
-		</script>
-	<span id="export-link"></span>
+	</script>
 </body>
 </html>
