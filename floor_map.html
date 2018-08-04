@@ -55,8 +55,8 @@
 			myContextMenu.style.top = y+'px';
 			myContextMenu.classList.add('show');
 			console.log(x,y);   // x座標(絶対座標)
-			globalx=e.screenX;
-			globaly=e.screenY;
+			globalx=e.pageX;
+			globaly=e.pageY;
 		});
 		document.body.addEventListener('click',function(){
 			if(myContextMenu.classList.contains('show')) {
