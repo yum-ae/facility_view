@@ -49,14 +49,14 @@
 	<script>
 		var myContextMenu = document.getElementById('js-contextmenu');
 		document.getElementById("target").addEventListener('contextmenu',function(e){
-			var x = e.pageX;
-			var y = e.pageY;
+			var x = e.clientX;
+			var y = e.clientY;
 			myContextMenu.style.left = x+'px';
 			myContextMenu.style.top = y+'px';
 			myContextMenu.classList.add('show');
 			console.log(x,y);   // x座標(絶対座標)
-			globalx=x
-			globaly=y
+			globalx=e.screenX;
+			globaly=e.screenY;
 		});
 		document.body.addEventListener('click',function(){
 			if(myContextMenu.classList.contains('show')) {
@@ -74,7 +74,7 @@
 		// -5 for point size itself
 		point.style.left=globalx - 5 + 'px';
 		point.style.top=globaly -5 + 'px';
-
+		point.href='./360view.html'
 		document.body.appendChild(point);
 		alert(file[0].name + "を取得しました。");
 
@@ -88,7 +88,7 @@
 		var data = JSON.stringify(tasks);
 		var exp = document.createElement('a');
 		exp.textContent = 'export'
-		exp.download = 'tasks.json';
+		exp.download = 'setting.json';
 		exp.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
 		exp.dataset.downloadurl = ['text/plain', exp.download, exp.href].join(':');
 		var exportLink = document.getElementById('export-link');
