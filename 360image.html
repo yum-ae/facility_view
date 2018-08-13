@@ -1,0 +1,19 @@
+ <!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+  <script src="./aframe.min.js"></script>
+</head>
+<body>
+  <a-scene>
+        <a-sky rotation="0 170 0" src="" id="image"></a-sky>
+    </a-scene>
+    <script>
+        var query = document.location.search.substring(1);
+        var img = document.getElementById("image");
+        img.setAttribute("src", "./360image/"+query);
+    </script>
+  </body>
+</html>
+

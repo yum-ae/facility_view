@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style>
+		.icon{
+			height:5 px;
+			width:5 px
+		}
+		a.point{
+			position: absolute;  
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: skyblue;
+		}
+		.my-contextmenu {
+			display: none;
+			position: fixed;
+			height: 70px;
+			width: 400px;
+			background-color: #fff;
+			border: 1px solid #ccc;
+			box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+			z-index: 1000;
+			}
+		.my-contextmenu.show {
+			display: block;
+			}
+		.my-contextmenu ul {
+			list-style: none;
+			}
+		.my-contextmenu ul li {
+			padding: 4px 4px;
+			font-size: 14px;
+			color: #333;
+			}
+	</style>
+</head>
+<body onContextmenu="return false;">
+	<a id="export"><img src="./icon/save.svg" class="icon" style="height:30px; width:30px"></a>
+	<img src="./floorMap/sample.svg" id="target">
+	<br>
+	<form name="import_form">
+		<img src="./icon/openFIle.svg" class="icon"  style="height:30px; width:30px">
+		<input name="import" type="file" /><br/>
+	</form>	
+<!-- context menu --> 
+	<div class="my-contextmenu" id="js-contextmenu">
+		<ul>
+			<li>add picture here <input type="file" id="setfile" accept="image/*" capture="camera"></li>
+		</ul>
+	</div>
+	<script>//json read
+		var form = document.forms.import_form;
+		form.import.addEventListener( 'change', function(e) {		
+			var result = e.target.files[0];
+			//FileReaderのインスタンスを作成する
+			var reader = new FileReader();
+			//読み込んだファイルの中身を取得する
+			reader.readAsText( result );
+			//ファイルの中身を取得後に処理を行う
+			reader.addEventListener( 'load', function() {
+				//ファイルの中身をtextarea内に表示する
+				var json = JSON.parse(reader.result);
+				// -5 for point size itself
+				for (var i=0;i<json.length;i++){
+					var point = document.createElement('a');
+					point.className="point";
+					var mapOffsetX = document.getElementById("target").getBoundingClientRect().left+window.pageXOffset;
+					var mapOffsetY = document.getElementById("target").getBoundingClientRect().top+window.pageYOffset;
+					point.style.left=json[i].posX+ mapOffsetX + 'px';
+					point.style.top=json[i].posY + mapOffsetY + 'px';
+					point.href=json[i].path;
+					document.body.appendChild(point);
+				}
+				alert("file is read");
+			})
+		})
+	</script>
+	<script>
+		var myContextMenu = document.getElementById('js-contextmenu');
+		document.getElementById("target").addEventListener('contextmenu',function(e){
+			//menu cordinates
+			var x = e.clientX;
+			var y = e.clientY;
+			myContextMenu.style.left = x+'px';
+			myContextMenu.style.top = y+'px';
+			myContextMenu.classList.add('show');
+			console.log(x,y);   // x座標(絶対座標)
+			//point cordinates
+			gMapRectX=e.currentTarget.getBoundingClientRect().left + window.pageXOffset;
+			gOffsetX=e.offsetX;
+			gMapRectY=e.currentTarget.getBoundingClientRect().top + window.pageYOffset;
+			gOffsetY=e.offsetY;
+		});
+		document.body.addEventListener('click',function(){
+			if(myContextMenu.classList.contains('show')) {
+				myContextMenu.classList.remove('show');
+			}
+		});
+	</script>
+	<script>
+		var setfile = document.getElementById("setfile");
+		setfile.addEventListener("change", function(evt){
+			var file = evt.target.files;
+			var point = document.createElement('a');
+			point.className="point";
+			// -5 for point size itself
+			point.style.left=gMapRectX + gOffsetX - 5 + 'px';
+			point.style.top=gOffsetY + gMapRectY -5 + 'px';
+			point.href='./360image.html?'+file[0].name
+			document.body.appendChild(point);
+			console.log(file[0])
+			alert(file[0].name + " is registered");
+		});
+	
+
+		//JSON preserve
+		var exp=document.getElementById('export')
+		exp.addEventListener("click", function(){
+			var json = [];
+			var ptlist=document.getElementsByClassName('point')
+			for (var i=0;i<ptlist.length;i++){
+				json.push({posX: parseInt(ptlist.item(i).style.left)-gMapRectX, posY: parseInt(ptlist.item(i).style.top)-gMapRectY, path:ptlist.item(i).href});
+			}
+			var data = JSON.stringify(json);
+			this.download = 'setting.json';
+			this.href = window.URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+			this.dataset.downloadurl = ['text/plain', this.download, this.href].join(':');
+		},false);
+	</script>
+</body>
+</html>
