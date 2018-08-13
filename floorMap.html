@@ -36,10 +36,31 @@
 			color: #333;
 			}
 	</style>
+	<script>//initial points loading
+		httpObj = new XMLHttpRequest();
+        httpObj.open("get", "./settings/setting.json", true);
+        httpObj.onload = function(){
+			var json = JSON.parse(this.response);
+			for (var i=0;i<json.length;i++){
+					var point = document.createElement('a');
+					point.className="point";
+					var mapOffsetX = document.getElementById("target").getBoundingClientRect().left+window.pageXOffset;
+					var mapOffsetY = document.getElementById("target").getBoundingClientRect().top+window.pageYOffset;
+					point.style.left=json[i].posX+ mapOffsetX + 'px';
+					point.style.top=json[i].posY + mapOffsetY + 'px';
+					point.href=json[i].path;
+					document.body.appendChild(point);
+				}
+		}
+		httpObj.send(null);
+	</script>
+
+
+
 </head>
 <body onContextmenu="return false;">
 	<a id="export"><img src="./icon/save.svg" class="icon" style="height:30px; width:30px"></a>
-	<img src="./floorMap/sample.svg" id="target">
+		<img src="./floorMap/sample.svg" id="target">
 	<br>
 	<form name="import_form">
 		<img src="./icon/openFIle.svg" class="icon"  style="height:30px; width:30px">
@@ -53,14 +74,14 @@
 	</div>
 	<script>//json read
 		var form = document.forms.import_form;
-		form.import.addEventListener( 'change', function(e) {		
-			var result = e.target.files[0];
+		form.import.addEventListener('change', function(e){		
+			var file = e.target.files[0];
 			//FileReaderのインスタンスを作成する
 			var reader = new FileReader();
 			//読み込んだファイルの中身を取得する
-			reader.readAsText( result );
+			reader.readAsText(file);
 			//ファイルの中身を取得後に処理を行う
-			reader.addEventListener( 'load', function() {
+			reader.addEventListener('load', function(){
 				//ファイルの中身をtextarea内に表示する
 				var json = JSON.parse(reader.result);
 				// -5 for point size itself
@@ -74,7 +95,7 @@
 					point.href=json[i].path;
 					document.body.appendChild(point);
 				}
-				alert("file is read");
+				alert("file is loaded");
 			})
 		})
 	</script>
