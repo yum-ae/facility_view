@@ -7,8 +7,23 @@
 </head>
 <body>
   <a-scene>
+        
         <a-sky rotation="0 170 0" src="" id="image"></a-sky>
+<a-camera>
+  <a-entity cursor="fuse: true; maxDistance: 30; timeout: 500"
+            position="0 0 -5"
+            geometry="primitive: ring"
+            material="color: white; shader: flat">
+  </a-entity>
+</a-camera>
+
+<a-entity id="cube" geometry="primitive: box" material="color: blue"></a-entity>
     </a-scene>
+    <script>document.querySelector('#cube').addEventListener('click', function () {
+        this.setAttribute('material', 'color', 'red');
+        console.log('I was clicked!');
+      });
+    </script>
     <script>
         var query = document.location.search.substring(1);
         var img = document.getElementById("image");
