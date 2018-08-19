@@ -1,17 +1,17 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>360</title>
   <script src="./aframe.min.js"></script>
+
 </head>
 <body>
-  <a-scene>
-        
-        <a-sky rotation="0 170 0" src="" id="image"></a-sky>
-        <a-entity position="0 2.2 4">
-          <a-entity camera look-controls wasd-controls>
-            <a-entity position="0 0 -3"
+  <a-scene id="scene">
+        <a-sky rotation="0 0 0" src="" id="image"></a-sky>
+        <a-entity position="0 0 0">
+          <a-entity camera look-controls wasd-controls id="camera">
+            <a-entity position="0 0 -4"
                       geometry="primitive: ring; radiusOuter: 0.30;
                                 radiusInner: 0.20;"
                       material="color: cyan; shader: flat"
@@ -23,19 +23,42 @@
             </a-entity>
           </a-entity>
         </a-entity>
-    <a-entity id="cube" geometry="primitive: box" material="color: blue" position="5 0 0"></a-entity>
-    </a-scene>
-    <script>document.querySelector('#cube').addEventListener('click', function () {
-        this.setAttribute('material', 'color', 'red');
-        console.log('I was clicked!');
-        location.href = 'file:///home/yumae/git/facility_view/360image.html?3602.jpg';
-      });
-    </script>
+    <a-entity id="cube" geometry="primitive: box" material="color: blue" position="5 0 8"></a-entity>
+  </a-scene>
     <script>
         var query = document.location.search.substring(1);
         var img = document.getElementById("image");
         img.setAttribute("src", "./360image/"+query);
     </script>
-  </body>
+    <script>//initial points loading
+      httpObj = new XMLHttpRequest();
+          httpObj.open("get", "./settings/setting.json", true);
+          httpObj.onload = function(){
+        var json = JSON.parse(this.response);
+        for (var i=0;i<json.length;i++){
+            var circle = document.createElement('a-sphere');
+            var posX= Math.round(json[i].posX/100);
+            var posZ= Math.round(json[i].posY/100);
+            var posXY= posX+' 0 '+posZ;
+            circle.name=json[i].name;
+            circle.setAttribute('position',posXY);
+            circle.setAttribute('radius', "0.3");
+            circle.setAttribute('color', "red");
+            circle.className='sphere';
+            document.getElementById("scene").appendChild(circle);
+            circle.addEventListener('click', function () { //camera move when clicked
+              this.setAttribute('material', 'color', 'white');
+              console.log('I was clicked!');
+              var pos=this.getAttribute('position');
+              var img = document.getElementById("image");
+              img.setAttribute("src", "./360image/"+this.name);
+              document.getElementById('camera').setAttribute('position', pos)
+            });
+
+          }
+      }
+      httpObj.send(null);
+    </script>
+</body>
 </html>
 

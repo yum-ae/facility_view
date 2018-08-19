@@ -93,13 +93,14 @@
 					point.style.left=json[i].posX+ mapOffsetX + 'px';
 					point.style.top=json[i].posY + mapOffsetY + 'px';
 					point.href=json[i].path;
+					point.name=json[i].name;
 					document.body.appendChild(point);
 				}
 				alert("file is loaded");
 			})
 		})
 	</script>
-	<script>
+	<script>//contextmenu
 		var myContextMenu = document.getElementById('js-contextmenu');
 		document.getElementById("target").addEventListener('contextmenu',function(e){
 			//menu cordinates
@@ -121,7 +122,7 @@
 			}
 		});
 	</script>
-	<script>
+	<script>//create point
 		var setfile = document.getElementById("setfile");
 		setfile.addEventListener("change", function(evt){
 			var file = evt.target.files;
@@ -130,9 +131,10 @@
 			// -5 for point size itself
 			point.style.left=gMapRectX + gOffsetX - 5 + 'px';
 			point.style.top=gOffsetY + gMapRectY -5 + 'px';
-			point.href='./360image.html?'+file[0].name
+			point.href='./360image.html?'+file[0].name;
+			point.name=file[0].name;
 			document.body.appendChild(point);
-			console.log(file[0])
+			console.log(file[0]);
 			alert(file[0].name + " is registered");
 		});
 	
@@ -143,7 +145,11 @@
 			var json = [];
 			var ptlist=document.getElementsByClassName('point')
 			for (var i=0;i<ptlist.length;i++){
-				json.push({posX: parseInt(ptlist.item(i).style.left)-gMapRectX, posY: parseInt(ptlist.item(i).style.top)-gMapRectY, path:ptlist.item(i).href});
+				json.push({posX: parseInt(ptlist.item(i).style.left)-gMapRectX,
+						   posY: parseInt(ptlist.item(i).style.top)-gMapRectY,
+						   path: ptlist.item(i).getAttribute("href"),
+						   name: ptlist.item(i).name
+						  });
 			}
 			var data = JSON.stringify(json);
 			this.download = 'setting.json';
